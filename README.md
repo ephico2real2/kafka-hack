@@ -81,15 +81,15 @@ fi
 
 # Optional verification
 if [ "$VERIFY" = true ]; then
-    # Verify the keystore
-    keytool -list -v -keystore ./kafka.keystore.jks -storepass ${STOREPASS}
+    echo "Verifying keystore file (kafka.keystore.jks):"
+    keytool -list -v -keystore ./kafka.keystore.jks -storepass ${STOREPASS} | grep -i "valid from"
     if [ $? -ne 0 ]; then
         echo "Failed to verify keystore file."
         exit 1
     fi
 
-    # Verify the truststore
-    keytool -list -v -keystore ./kafka.truststore.jks -storepass ${STOREPASS}
+    echo "Verifying truststore file (kafka.truststore.jks):"
+    keytool -list -v -keystore ./kafka.truststore.jks -storepass ${STOREPASS} | grep -i "valid from"
     if [ $? -ne 0 ]; then
         echo "Failed to verify truststore file."
         exit 1
@@ -99,6 +99,7 @@ if [ "$VERIFY" = true ]; then
 else
     echo "Keystore and Truststore copied successfully."
 fi
+
 ```
 
 ### Make the Script Executable
