@@ -1,4 +1,4 @@
-Combined script to copy and verify JKS files from both primary and deadletter namespaces, and then create Kubernetes secrets:
+Let's address the issue causing illegal operations and streamline the script to ensure it works correctly. Here is a revised version of the combined script:
 
 ```bash
 #!/bin/bash
@@ -41,13 +41,9 @@ if [ -z "${PRIMARY_NAMESPACE}" ] || [ -z "${DEADLETTER_NAMESPACE}" ] || [ -z "${
     usage
 fi
 
-# Set default paths if not provided
-if [ -z "${KEYSTORE_PATH}" ]; then
-    KEYSTORE_PATH="/vault/secrets/kafka.keystore.jks"
-fi
-if [ -z "${TRUSTSTORE_PATH}" ]; then
-    TRUSTSTORE_PATH="/vault/secrets/kafka.truststore.jks"
-fi
+# Set default paths
+KEYSTORE_PATH="/vault/secrets/kafka.keystore.jks"
+TRUSTSTORE_PATH="/vault/secrets/kafka.truststore.jks"
 DEADLETTER_KEYSTORE_PATH="/vault/secrets/deadletter_kafka.keystore.jks"
 DEADLETTER_TRUSTSTORE_PATH="/vault/secrets/deadletter_kafka.truststore.jks"
 
@@ -133,7 +129,7 @@ echo "Keystore and Truststore files copied, verified, and secrets created succes
 
 ### Running the Combined Script
 
-To run the combined script with the default paths and verbose verification, use the following command:
+To run the combined script with default paths and verbose verification, use the following command:
 
 ```bash
 ./copy_and_verify_jks.sh -p primary-kafka -d deadletter-kafka -s your-keystore-password -v
