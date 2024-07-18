@@ -1,5 +1,46 @@
 Step-by-step commands, including the specific patch command to remove the `keystore` init container, create the secret, and add the necessary volume mounts:
 
+
+### Goal
+
+```yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: kafka-broker
+  namespace: primary-kafka
+spec:
+  serviceName: "kafka-broker"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka
+  template:
+    metadata:
+      labels:
+        app: kafka
+    spec:
+      containers:
+      - name: kafka
+        image: confluentinc/cp-kafka:latest
+        ports:
+        - containerPort: 9092
+        volumeMounts:
+        - name: kafka-secrets
+          mountPath: /vault/secrets/kafka.keystore.jks
+          subPath: kafka.keystore.jks
+        - name: kafka-secrets
+          mountPath: /vault/secrets/kafka.truststore.jks
+          subPath: kafka.truststore.jks
+      volumes:
+      - name: kafka-secrets
+        secret:
+          secretName: cloudeng-kafka-jks
+
+```
+
+
+
 ### Step 1: Create the Secret
 
 ```sh
